@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>AI Video</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Ubuntu:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <style>
+      .hide-popup.open {
+        width: 100%;
+        display: block;
+      }
+
+      .hide-popup {
+        width: 0;
+        transition: 5s ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark p-0">
+          <a href="{% url 'index' %}" class="navbar-brand">
+            <h1 class="text-dark">AI <span class="text-dark">.</span>Video </h1>
+          </a>
+          <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon">
+              <i class="fa-solid fa-bars"></i>
+            </span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto">
+              <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a> {% if request.session.email %} <a href="{% url 'logout' %}" class="nav-item nav-link active">LogOut</a>
+              <a href="{% url 'work_space' pk=1 %}" class="nav-item nav-link active">Create New</a> {% else %} <a href="{% url 'signup' %}" class="nav-item nav-link active">SignUp</a>
+              <a href="{% url 'login' %}" class="nav-item nav-link active">LogIn</a> {% endif %} {% if request.session.email %} <a href="{% url 'work_space' pk=1 %}" class="nav-item nav-link active">WorkSpace</a> {% endif %} <butaton type="button" class="btn text-white p-0 d-none d-lg-block" data-bs-toggle="modal" data-bs-target="#searchModal">
+                <i class="fa fa-search"></i>
+              </butaton>
+            </div>
+        </nav>
+      </div>
+    </div>
+    <div class="hide-popup">
+      <div class="popup-wrapper">
+        <div class="popup-inside-wrapper">
+          <div class="btn-wrapper">
+            <button class="btn-close-ct">
+              <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44">
+                <g transform="translate(-1377 -4889)">
+                  <g transform="translate(1377 4889)" fill="#fbf9f7">
+                    <path d="M22,0A22,22,0,1,1,0,22,22,22,0,0,1,22,0Z" stroke="none"></path>
+                    <path d="M 22 1 C 19.16457939147949 1 16.41449928283691 1.555099487304688 13.8261604309082 2.649871826171875 C 11.32561111450195 3.707511901855469 9.079681396484375 5.221828460693359 7.150760650634766 7.150760650634766 C 5.221828460693359 9.079681396484375 3.707511901855469 11.32561111450195 2.649871826171875 13.8261604309082 C 1.555099487304688 16.41449928283691 1 19.16457939147949 1 22 C 1 24.83542060852051 1.555099487304688 27.58550071716309 2.649871826171875 30.1738395690918 C 3.707511901855469 32.67438125610352 5.221828460693359 34.92031097412109 7.150760650634766 36.84923934936523 C 9.079681396484375 38.77817153930664 11.32561111450195 40.29248046875 13.8261604309082 41.35012817382812 C 16.41449928283691 42.44490051269531 19.16457939147949 43 22 43 C 24.83542060852051 43 27.58550071716309 42.44490051269531 30.1738395690918 41.35012817382812 C 32.67438125610352 40.29248046875 34.92031097412109 38.77817153930664 36.84923934936523 36.84923934936523 C 38.77817153930664 34.92031097412109 40.29248046875 32.67438125610352 41.35012817382812 30.1738395690918 C 42.44490051269531 27.58550071716309 43 24.83542060852051 43 22 C 43 19.16457939147949 42.44490051269531 16.41449928283691 41.35012817382812 13.8261604309082 C 40.29248046875 11.32561111450195 38.77817153930664 9.079681396484375 36.84923934936523 7.150760650634766 C 34.92031097412109 5.221828460693359 32.67438125610352 3.707511901855469 30.1738395690918 2.649871826171875 C 27.58550071716309 1.555099487304688 24.83542060852051 1 22 1 M 22 0 C 34.15026092529297 0 44 9.8497314453125 44 22 C 44 34.15026092529297 34.15026092529297 44 22 44 C 9.8497314453125 44 0 34.15026092529297 0 22 C 0 9.8497314453125 9.8497314453125 0 22 0 Z" stroke="none" fill="rgba(0,0,0,0.15)"></path>
+                  </g>
+                  <line x1="4.047" y1="4.045" transform="translate(1394.954 4906.955)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="1"></line>
+                  <line y1="4.045" x2="4.047" transform="translate(1399 4906.955)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="1"></line>
+                  <line x1="4.047" y2="4.045" transform="translate(1394.954 4911)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="1"></line>
+                  <line x2="4.047" y2="4.045" transform="translate(1399 4911)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="1"></line>
+                </g>
+              </svg>
+            </button>
+          </div>
+          <div class="nav-item-wrapper">
+            <div class="navbar-nav ms-auto">
+              <a href="{% url 'index' %}" class="nav-item nav-link active">Home</a> {% if request.session.email %} <a href="{% url 'logout' %}" class="nav-item nav-link active">LogOut</a>
+              <a href="{% url 'work_space' pk=1 %}" class="nav-item nav-link active">Create New</a> {% else %} <a href="{% url 'signup' %}" class="nav-item nav-link active">SignUp</a>
+              <a href="{% url 'login' %}" class="nav-item nav-link active">LogIn</a> {% endif %} {% if request.session.email %} <a href="{% url 'work_space' pk=1 %}" class="nav-item nav-link active">WorkSpace</a> {% endif %} <butaton type="button" class="btn text-white p-0 d-none d-lg-block" data-bs-toggle="modal" data-bs-target="#searchModal">
+                <i class="fa fa-search"></i>
+              </butaton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Navbar End -->
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 hero-header mb-5">
+      <div class="container pt-5">
+        <div class="row g-5 pt-5">
+          <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+            <h1 class="text-white mb-4 animated text-center ctm-text">Generate videos through <span> text prompts</span>
+            </h1>
+            <p class="text-white text-center des">With AI.video as your assistant, it scripts, designs scenes, incorporates voice-overs, and fine-tunes the video according to your instructions, making audience engagement effortlessly easy!</p>
+            <div class="col-12 btn-wrapper-home">
+              <a href="{% url 'login' %}" class="btn btn-light w-5 py-2" type="submit">Try AI Video</a>
+            </div>
+          </div>
+          <!-- <div class="col-lg-6 align-self-end text-center text-lg-end"> -->
+          <!-- <img class="img-fluid" src="{% static 'img/hero-img.png' %}" alt=""> -->
+          <!-- </div> -->
+        </div>
+      </div>
+      <div class="video-wrapper">
+        <video autoplay="" loop="" muted="" width="100%" height="100%" class="iv-h-full iv-rounded-[20px] iv-bg-grey-100" style="box-shadow:0px 20px 100px 0px rgba(0, 0, 0, 0.35)">
+          <source src="{% static 'video/home_page.mp4' %}">
+        </video>
+      </div>
+      <!-- logo brand and review section -->
+    </div>
+    <div class="logo-brand-container">
+      <div class="logo-brand-group">
+        <div class="logo-brand-wrapper">
+          <h1>7M</h1>
+          <div class="text-data">Customers</div>
+          <div class="text-data-country">190 <span class="text-inside-data-country">countries</span>
+          </div>
+        </div>
+        <div class="logo-brand-wrapper">
+          <div class="img-wrapper">
+            <img src="{% static 'img/rating.svg' %}">
+          </div>
+          <div class="text-data">Product of the month</div>
+          <div class="img-wrapper">
+            <img src="{% static 'img/product-hunt.svg' %}">
+          </div>
+        </div>
+        <div class="logo-brand-wrapper">
+          <h1>4.8</h1>
+          <span class="iv-achievement-ratings" style="--star-rating:4.8;--star-size:var(--rating-star-default-size);--star-background:var(--achievement-capterra);--star-mask:var(--achievement-capterra-mask)"></span>
+          <div class="img-wrapper">
+            <img src="{% static 'img/captera.svg' %}">
+          </div>
+        </div>
+        <div class="logo-brand-wrapper">
+          <h1>4.6</h1>
+          <span class="iv-achievement-ratings green" style="--star-rating:4.6;--star-size:var(--rating-star-default-size);--star-background:var(--achievement-trustpilot);--star-mask:var(--achievement-trustpilot-mask)"></span>
+          <div class="img-wrapper">
+            <img src="{% static 'img/trustpilot.svg' %}">
+          </div>
+        </div>
+        <div class="logo-brand-wrapper">
+          <h1>4.8</h1>
+          <span class="iv-achievement-ratings orange" style="--star-rating:4.8;--star-size:var(--rating-star-default-size);--star-background:var(--achievement-g2);--star-mask:var(--achievement-g2-mask)"></span>
+          <div class="img-wrapper">
+            <img src="{% static 'img/grating.svg' %}">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- logo review section end -->
+    <!-- image grid view -->
+    <div>
+      <div class="image-grid-view">
+        <h1 class="ctm-text image-grid">Experience a unified video solution with <span>AI.video</span> at your fingertips </h1>
+      </div>
+    </div>
+    </div>
+    <!-- review by businessmen end -->
+    <!-- Hero End -->
+    <!-- Footer Start -->
+    <div class="container-fluid text-white-50 footer pt-5">
+      <div class="container py-5">
+        <div class="row g-5">
+          <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
+            <a href="index.html" class="d-inline-block mb-3">
+              <h1 class="text-white">AI <span class="text-primary">.</span>Video </h1>
+            </a>
+            <p class="mb-0">AI.video offers a seamless experience, empowering you to create captivating videos effortlessly with the power of artificial intelligence, revolutionizing your content creation process.</p>
+          </div>
+          <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
+            <h5 class="text-white mb-4">Get In Touch</h5>
+            <p>
+              <i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA
+            </p>
+            <p>
+              <i class="fa fa-phone-alt me-3"></i>+012 345 67890
+            </p>
+            <p>
+              <i class="fa fa-envelope me-3"></i>info@example.com
+            </p>
+            <div class="d-flex pt-2">
+              <a class="btn btn-outline-light btn-social" href="">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a class="btn btn-outline-light btn-social" href="">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a class="btn btn-outline-light btn-social" href="">
+                <i class="fab fa-youtube"></i>
+              </a>
+              <a class="btn btn-outline-light btn-social" href="">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a class="btn btn-outline-light btn-social" href="">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
+            <h5 class="text-white mb-4">Popular Link</h5>
+            <a class="btn btn-link" href="{% url 'index' %}">AI.Video</a>
+            <a class="btn btn-link" href="{% url 'login' %}">Log In</a>
+            <a class="btn btn-link" href="{% url 'signup' %}">Sign Up</a>
+          </div>
+          <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.7s">
+            <h5 class="text-white mb-4">Our Services</h5>
+            <a class="btn btn-link" href="">Text Generation</a>
+            <a class="btn btn-link" href="">Video Creation</a>
+            <a class="btn btn-link" href="">Audio Synthesis</a>
+            <a class="btn btn-link" href="">Customization Options</a>
+            <a class="btn btn-link" href="">Advanced AI</a>
+          </div>
+        </div>
+      </div>
+      <div class="container wow fadeIn" data-wow-delay="0.1s">
+        <div class="copyright">
+          <div class="row">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0 text-dark"> &copy; <a class="border-bottom text-dark" href="#">AI Video</a>, All Right Reserved. </div>
+            <div class="col-md-6 text-center text-md-end">
+              <div class="footer-menu">
+                <a href="">Home</a>
+                <a href="">Cookies</a>
+                <a href="">Help</a>
+                <a href="">FAQs</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top pt-2">
+      <i class="bi bi-arrow-up"></i>
+    </a>
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+      $(document).ready(function() {
+        // $('.navbar-toggler').click(function () {
+        //     $('.collapse.navbar-collapse').toggle();
+        // });
+        $(".navbar-toggler-icon").click(function() {
+          $(".hide-popup").addClass("open");
+        });
+        $(".btn-close-ct").click(function() {
+          $(".hide-popup").removeClass("open");
+        })
+      });
+    </script>
+  </body>
+</html>

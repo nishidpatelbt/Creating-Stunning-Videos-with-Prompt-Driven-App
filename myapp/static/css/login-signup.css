@@ -1,0 +1,56 @@
+.container-fluid.sticky-top{
+    background-color: transparent;
+}
+.login-signup .container-fluid.sticky-top.bg-primary.shadow-sm{
+    background-color: black !important;
+}
+.container-fluid.sticky-top .container .navbar-collapse .navbar-nav .nav-item{
+    color: white !important;
+}
+.container-fluid.flex.py-5{
+    max-width: 1440px;
+    padding-top: 0 !important;
+    background-color: #0D0D0D;
+    margin-top: -75px;
+    padding-bottom: 0 !important;
+    padding: 0 !important;
+}
+.container-fluid.flex.py-5 .container.max-width{
+    background-color: transparent;
+    padding: 100px 0 40px !important;
+    justify-content: start;
+}
+.container-fluid.flex.py-5 .c-PJLV.c-fBjWAM{
+    background-color: rgb(25,25,25);
+    padding: 100px 0 40px;
+}
+.margin-top.text-white.ctm-text,
+.login-heading.text-white.ctm-text,
+.c-PJLV.c-bOhtCq.ctm-text,
+.margin-top.ctm-text
+{
+    color: white !important;
+    font-size: 42px !important;
+}
+.container-fluid.flex.py-5 .container.max-width .justify-content-center .width-inc .form-floating.custom-form input{
+    background-color: transparent !important;
+    border-radius: 5px;
+}
+.btn-primary-ct{
+    background-color: #1A1D1E;
+    color: #97A1A6;
+    border-radius: 50px;
+    margin-top: 1rem;
+}
+.full-width.text-center.lnk span{
+    color: #FFFFFF66;
+    font-weight: 600;
+}
+@media only screen and (max-width: 991px){
+    .container-fluid.flex.py-5 .container.max-width{
+        padding: 100px 20px 40px !important;
+    }
+    .container-fluid.flex.py-5{
+        flex-direction: column;
+    }
+}

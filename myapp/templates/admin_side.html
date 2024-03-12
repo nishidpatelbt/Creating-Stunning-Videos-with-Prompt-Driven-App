@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>AI Video</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Ubuntu:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <style type="text/css">
+        body {
+            background-color: #000 !important;
+        }
+        .container-fluid {
+            background-color: #000;
+        }
+        #folio {
+            width: 100%;
+        }
+        h3 {
+    text-align: center;
+    color: #ffffffd9 !important;
+    background-color: #ffffff59;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 15px 0;
+    margin-bottom: 0 !important;
+}
+.grid-main {
+        display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 30px;
+    gap: 15px;
+}
+.grid-main .grid-child {
+        flex: 0 0 49.3%;
+    max-width: 49.3%;
+        background-color: #ffffff59;
+            border-radius: 10px;
+    padding: 15px;
+}
+table {
+    width: 100%;
+    border: 1px solid #ffffff80;
+    text-align: center;
+}
+table thead, 
+table thead tr,
+table thead tr th,
+table tbody,
+table tbody tr,
+table tbody tr td {
+        border-color: #ffffff80;
+    border-style: solid;
+    border-width: 1px;
+}
+table tbody tr td {
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark p-0">
+                <a href="{% url 'index' %}" class="navbar-brand">
+                    <h1 class="text-white">AI<span class="text-dark">.</span>Video</h1>
+                </a>
+
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto">
+                        <a href="{% url 'admin_logout' %}" class="nav-item nav-link active">LogOut</a>
+                        <button type="button" class="btn text-white p-0 d-none d-lg-block" data-bs-toggle="modal"
+                            data-bs-target="#searchModal"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+    <section id="folio" class="s-folio target-section">
+        <h3>Admin Dashboard</h3>
+        <div class="grid-main">
+        <div class="grid-child admin-side-grid">
+            <h4 class="text-white user-info-heading">User's History:</h4>
+            <div class="total-user-video">
+                <div class="total-user">
+                    <span class="text-white">Total Users</span>
+                    <span class="text-white">{{ total_user_count }}</span>
+                </div>
+                <div class="total-videos">
+                    <span class="text-white">Total Videos</span>
+                    <span class="text-white">{{ total_video_count }}</span>
+                </div>
+            </div>
+            <div class="most-common-messages">
+                <h4 class="text-white">Most Common Messages:</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="text-white">Prompt</th>
+                            <th class="text-white">Number of times searched</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in most_common_messages %}
+                        <tr>
+                            <td>{{ item.message }}</td>
+                            <td>{{ item.message_count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="grid-child user-info-main" style="display:none">
+            <h4 class="text-white user-info-heading">User-wise Video Counts:</h4>
+            <div class="user-info-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="text-white user-name-heading">Name</th>
+                            <th class="text-white user-video-heading">Total Videos</th>
+                            <th class="text-white user-detail-heading">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users_with_video_count %}
+                        <tr data-user="user-{{ user.name }}">
+                            <td class="user-name">{{ user.name }}</td>
+                            <td class="user-video-count">{{ user.video_count }}</td>
+                            <td class="user-video-detail"><a href="#">Click here to get more details</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="grid-child particular-user-info" style="display:none">
+            <h4 class="text-white">All Users Information:</h4>
+            <table>
+                <thead>
+                    <tr class="particular-user-heading-main">
+                        <th class="text-white particular-user-heading particular-user-name-heading">Name</th>
+                        <th class="text-white particular-user-heading particular-user-email-heading">Email</th>
+                        <th class="text-white particular-user-heading particular-user-password-heading">Password</th>
+                        <th class="text-white particular-user-heading particular-user-video-heading">Total Videos</th>
+                        <th class="text-white particular-user-heading particular-user-prompt-heading">Prompt Searched</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users_with_video_count %}
+                    <tr data-id="user-{{ user.name }}">
+                        <td class="particular-user-value particular-user-name">{{ user.name }}</td>
+                        <td class="particular-user-value particular-user-email">{{ user.email }}</td>
+                        <td class="particular-user-value particular-user-password">{{ user.pswd }}</td>
+                        <td class="particular-user-value particular-user-video">{{ user.video_count }}</td>
+                        <td class="particular-user-value particular-user-prompt">
+                            <ul>
+                                {% for workspace in user.workspace_set.all %}
+                                <li class="user-videourl-name" data-videoUrl="{{ workspace.video_url }}">{{ workspace.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="grid-child modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="videoModalLabel">Video Popup</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <video controls autoplay style="width: 100%;">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <style>
+        /* Add your custom styles here */
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.total-user').click(function () {
+                $('.user-info-main').toggle();
+                $('.most-common-messages').toggle();
+                if($('.particular-user-info').show()){
+                    $('.particular-user-info').hide()
+                }
+            });
+
+            $(".user-video-detail a").click(function (e) {
+                e.preventDefault();
+                var clickedUser = $(this).closest("tr").data("user");
+                $(".particular-user-info tr").hide();
+                $(".particular-user-info").show();
+                $(".particular-user-heading-main").show();
+                $(".particular-user-info tr[data-id='" + clickedUser + "']").show();
+            });
+
+            var messageElements = $('.user-videourl-name');
+
+            // Add click event listener to each message element
+            messageElements.on('click', function () {
+                // Get the video_url associated with the clicked message
+                var videoUrl = $(this).attr('data-videoUrl');
+
+                // Open a Bootstrap modal and create a video element with autoplay
+                $('#videoModal').modal('show');
+                $('#videoModal video').attr('src', videoUrl);
+            });
+        });
+    </script>
+</body>
+</html>

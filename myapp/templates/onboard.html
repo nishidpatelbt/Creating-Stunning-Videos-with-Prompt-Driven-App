@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Inter, sans-serif;
+            background-color: #000;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        .onborad-main {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .onborad-main-box {
+            display: flex;
+            flex-direction: column;
+            row-gap: 8px;
+        }
+        .onborad-main-first {
+            display: flex;
+            width: 100%;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+        .onborad-main-second {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .onboard-inner {
+            display: flex;
+            column-gap: 20px;
+            align-items: center;
+            flex: 0 0 25%;
+            max-width: 25%;
+            justify-content: center;
+            padding: 19px 8px;
+        }
+        .onborad-firsticon {
+            position: relative;  
+        }
+        .onborad-firsticon span {
+            color: #ffffff4d;
+            font-weight: 700;
+            font-size: 15.5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff1a;
+            border-radius: 50%;
+            height: 22px;
+            width: 100%;
+            max-width: 22px;
+            min-width: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: none;
+        }
+        .col-12.onborad-main-button-main {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .onborad-main {
+            display: flex;
+            flex-direction: column;
+            row-gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0px 20px;
+        }
+        .col-12.onborad-main-button-main button.btn.btn-primary {
+            background-color: #009ff5;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            font-family: Inter, sans-serif;
+            width: 300px;
+            height: 52px;
+            border-radius: 110px;
+            margin-top: 25px;
+        }
+        button.btn.btn-primary.w-10.discover-our-project-button:hover {
+            background-color: #00b2ff;
+        }
+        .onborad-heading {
+            display: flex;
+            justify-content: center;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .onborad-heading h1 {
+            font-size: 32px;
+        }
+        form.out-mode-log-in .row.g-3.fl-cl {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            row-gap: 15px;
+        }
+        form.out-mode-log-in .row.g-3.fl-cl .col-md-6.full-width {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 15px;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+        .col-12.onborad-main-button-main-last button.btn.btn-primary.w-5.py-3 {
+            padding: 5px 24px !important;
+            border-radius: 30px;
+        }
+        .col-12.onborad-main-button-main-last {
+            display: flex;
+            justify-content: center;
+        }
+        .onborad-firsttext {
+            color: #ffffffd9;
+            cursor: pointer;
+            text-wrap: nowrap;
+        }
+        .onboard-inner.active .onborad-firsticon span {
+            background-color: #009ff5;
+            color: #fff;
+            border: none;
+        }
+        .onboard-inner.active .onborad-firsttext {
+            color: #00a0f5;
+        }
+        .onboard-inner svg {
+            visibility: hidden;
+        }
+        .onboard-inner.active svg {
+            visibility: visible;
+        }
+        .onborad-main form .form-control {
+            color: #ffffffd9;
+            padding: 13px 19px;
+            background: transparent;
+            width: 100%;
+            outline: 0;
+            border-radius: 5px;
+            border: 1px solid #ffffff59;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 21px;
+        }
+        @media only screen and (max-width: 768px) {
+            .onborad-heading h1 {
+                font-size: 28px;
+            }
+            .onborad-main-first, .onborad-main-second {
+                max-width: 70%;
+                margin: 0 auto;
+            }
+            .onborad-main-box {
+                row-gap: 0;
+            }
+            
+            .onboard-inner {
+                flex: 0 0 50%;
+                max-width: 50%;
+                justify-content: flex-start;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .onborad-heading h1 {
+                font-size: 24px;
+            }
+            .onborad-main-first, .onborad-main-second {
+                max-width: 50%;
+                margin: 0 auto;
+            }
+            .onboard-inner {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin: 0 auto;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main-content">
+        <main>
+            <div class="onborad-main discover-our-project">
+                <div class="onborad-heading">
+                    <h1>Just a quick one-how you discover our project?</h1>
+                </div>
+                <div class="onborad-main-box">
+                    <div class="onborad-main-first">
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">
+                                <span>A</span>
+                            </div>
+                            <div class="onborad-firsttext">Google search</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">
+                                <span>B</span>
+                            </div>
+                            <div class="onborad-firsttext">Friend/colleague</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">
+                                <span>C</span>
+                            </div>
+                            <div class="onborad-firsttext">Twitter</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon"><span>D</span>
+                            </div>
+                            <div class="onborad-firsttext">Blog/website</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                    </div>
+                    <div class="onborad-main-second">
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon"><span>E</span>
+                            </div>
+                            <div class="onborad-firsttext">Instagram</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon"><span>F</span>
+                            </div>
+                            <div class="onborad-firsttext">Youtube</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon"><span>G</span>
+                            </div>
+                            <div class="onborad-firsttext">TikTok</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon"><span>H</span>
+                            </div>
+                            <div class="onborad-firsttext">Other</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 onborad-main-button-main">
+                    <button class="btn btn-primary w-10 discover-our-project-button" type="submit">Continue</button>
+                </div>
+            </div>
+
+            <div class="onborad-main best-describes-you" style="display:none">
+                <div class="onborad-heading">
+                    <h1 class="text-white">One last thing - What best describes your reason for using AI Video?</h1>
+                </div>
+                <div class="onborad-main-box">
+                    <div class="onborad-main-first">
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">A</div>
+                            <div class="onborad-firsttext">Academic/Research</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">B</div>
+                            <div class="onborad-firsttext">Business Marketing</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">C</div>
+                            <div class="onborad-firsttext">Client Services</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">D</div>
+                            <div class="onborad-firsttext">Filmmaking & Documentaries</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                    </div>
+                    <div class="onborad-main-second">
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">E</div>
+                            <div class="onborad-firsttext">Content Creation</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                        <div class="onboard-inner">
+                            <div class="onborad-firsticon">F</div>
+                            <div class="onborad-firsttext">Other</div>
+                            <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.1629 1.02459C17.529 1.3907 17.529 1.9843 17.1629 2.35041L6.1875 13.3258L0.837087 7.97541C0.470971 7.6093 0.470971 7.0157 0.837087 6.64959C1.2032 6.28347 1.7968 6.28347 2.16291 6.64959L6.1875 10.6742L15.8371 1.02459C16.2032 0.658471 16.7968 0.658471 17.1629 1.02459Z" fill="#00A0F5"></path></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 onborad-main-button-main">
+                    <button class="btn btn-primary w-10 best-describes-you-button" type="submit">Continue</button>
+                </div>
+            </div>
+
+            <div class="onborad-main welcome-to-ai-video" style="display:none">
+                <div class="onborad-heading">
+                    <h1>Welcome to AI Video</h1>
+                </div>
+                {% if msg %}
+                <p style="color: green; text-align: center;">{{msg}}</p>
+                {% elif msg1 %}
+                <p style="color: red; text-align: center;">{{msg1}}</p>
+                {% else %}
+                <p style="color: red; text-align: center;"></p>
+                {% endif %}
+                <form class="out-mode-log-in" action="{% if user.pk %}{% url 'onboard' pk=user.pk %}{% endif %}" method="post">
+                    {% csrf_token %}
+                    <div class="row g-3 fl-cl">
+                        <div class="col-md-6 full-width">
+                            <span style="color: #ffffffd9; text-align: center; font-weight: 500;">What should we call you?</span>
+                            <input type="text" name="workspace_username" class="form-control" id="workspace_username" placeholder="e.g. Steven Jobs" required="true"/>
+                        </div>
+                        <div class="col-md-6 full-width">
+                            <span style="color: #ffffffd9; text-align: center; font-weight: 500;">Your first ever AIvideo workspace deserves a fun name!</span>
+                            <input type="text" name="workspace_name" class="form-control" id="workspace_name" placeholder="e.g. Steven WorkSpace" required="true"/>
+                        </div>
+                        <div class="col-12 onborad-main-button-main">
+                            <button class="btn btn-primary w-5 py-3 welcome-to-ai-video-button" type="submit">Continue</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    // Wait for the DOM to be ready
+    $(document).ready(function () {
+        // Disable the Continue button initially
+        $(".discover-our-project-button").prop("disabled", true);
+
+        // Add a click event listener to each "onboard-inner" element
+        $(".discover-our-project .onboard-inner").click(function () {
+            // Enable the Continue button when an "onboard-inner" element is clicked
+            $(".discover-our-project-button").prop("disabled", false);
+            $(".discover-our-project .onboard-inner").removeClass("active");
+            $(this).addClass("active");
+        });
+
+        // Add a click event listener to the Continue button (optional)
+        $(".discover-our-project-button").click(function () {
+         $(".discover-our-project").hide();
+         $(".best-describes-you").show();
+     });
+
+        $(".best-describes-you-button").prop("disabled", true);
+
+        // Add a click event listener to each "onboard-inner" element
+        $(".best-describes-you .onboard-inner").click(function () {
+            // Enable the Continue button when an "onboard-inner" element is clicked
+            $(".best-describes-you-button").prop("disabled", false);
+            $(".best-describes-you .onboard-inner").removeClass("active");
+            $(this).addClass("active");
+        });
+
+        // Add a click event listener to the Continue button (optional)
+        $(".best-describes-you-button").click(function () {
+         $(".best-describes-you").hide();
+         $(".welcome-to-ai-video").show();
+     });
+
+        $('#workspace_username').on('input', function () {
+            // Mirror the input value
+            $('#workspace_name').val($(this).val() + "'s Workspace");
+        });
+    });
+</script>
+</body>
+</html>

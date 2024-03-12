@@ -1,0 +1,1722 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style type="text/css">
+        .hide-element {
+            display: none !important;
+        }
+
+        #progressBar {
+            width: 95%;
+            height: 30px;
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .fat-progress-bar {
+            height: 20%;
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+            /* Change gradient colors as needed */
+            border-radius: 7px;
+            /* Adjust the border-radius for a fat appearance */
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #progressText {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            transform: translate(-50%, -50%);
+            color: #fff;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .popup-content {
+            margin: 4vh auto !important;
+            background: none;
+            max-width: 95%;
+            padding: 0;
+            border-radius: 8px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .loader-main {
+            width: 240px;
+            padding: 0 20px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 9;
+        }
+
+        .loader-container {
+            padding: 0 20px;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -0%);
+            align-items: center;
+            gap: 20px;
+        }
+
+        .loader-container .loader-text {
+            color: black;
+        }
+
+        .loader {
+            display: none;
+            animation: rotate 1s infinite;
+            height: 50px;
+            width: 50px;
+        }
+
+        .loader:before,
+        .loader:after {
+            border-radius: 50%;
+            content: '';
+            display: block;
+            height: 20px;
+            width: 20px;
+        }
+
+        .loader:before {
+            animation: ball1 1s infinite;
+            background-color: #cb2025;
+            box-shadow: 30px 0 0 #f8b334;
+            margin-bottom: 10px;
+        }
+
+        .loader:after {
+            animation: ball2 1s infinite;
+            background-color: #00a096;
+            box-shadow: 30px 0 0 #97bf0d;
+        }
+
+        @keyframes rotate {
+            0% {
+                -webkit-transform: rotate(0deg) scale(0.8);
+                -moz-transform: rotate(0deg) scale(0.8);
+            }
+
+            50% {
+                -webkit-transform: rotate(360deg) scale(1.2);
+                -moz-transform: rotate(360deg) scale(1.2);
+            }
+
+            100% {
+                -webkit-transform: rotate(720deg) scale(0.8);
+                -moz-transform: rotate(720deg) scale(0.8);
+            }
+        }
+
+        @keyframes ball1 {
+            0% {
+                box-shadow: 30px 0 0 #f8b334;
+            }
+
+            50% {
+                box-shadow: 0 0 0 #f8b334;
+                margin-bottom: 0;
+                -webkit-transform: translate(15px, 15px);
+                -moz-transform: translate(15px, 15px);
+            }
+
+            100% {
+                box-shadow: 30px 0 0 #f8b334;
+                margin-bottom: 10px;
+            }
+        }
+
+        @keyframes ball2 {
+            0% {
+                box-shadow: 30px 0 0 #97bf0d;
+            }
+
+            50% {
+                box-shadow: 0 0 0 #97bf0d;
+                margin-top: -20px;
+                -webkit-transform: translate(15px, 15px);
+                -moz-transform: translate(15px, 15px);
+            }
+
+            100% {
+                box-shadow: 30px 0 0 #97bf0d;
+                margin-top: 0;
+            }
+        }
+
+        #videoSlider {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        #videoSlider video {
+            width: 100%;
+            height: auto;
+        }
+
+        .slick-dots {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 0;
+        }
+
+        .slick-dots li {
+            margin: 0 5px;
+        }
+
+        .slick-dots li button {
+            font-size: 10px;
+            line-height: 15px;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .segment-texts-main .segment-text h3,
+        p {
+            color: black;
+        }
+
+        .slick-dots li.slick-active button {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .sidebar-container {
+            position: fixed;
+            top: 75px;
+            left: -300px;
+            /*Start off-screen to the left*/
+            width: 280px;
+            height: 100%;
+            background-color: #1c1c1c;
+            overflow-x: hidden;
+            transition: 0.5s;
+            /*Add a smooth transition*/
+        }
+
+        .sidebar-container .user-history {
+            padding: 15px;
+            border-bottom: 1px solid black;
+        }
+
+        .sidebar-container.active {
+            left: 0;
+            height: 100%;
+            z-index: 9999;
+        }
+
+        .sidebar-container .user-history h3 {
+            font-family: Inter, sans-serif;
+            color: rgb(141, 141, 141);
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 24px;
+        }
+
+        .sidebar-container .user-history ul {
+            padding-left: 1rem;
+            margin: 0;
+        }
+
+        .sidebar-container .user-history ul li {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+            column-gap: 9.5px;
+        }
+
+        .sidebar-container .user-history ul li a {
+            white-space: nowrap;
+            overflow: hidden;
+            padding-block: 6px;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 21px;
+            color: #808080;
+            font-family: Inter, sans-serif;
+        }
+
+        .form-floating {
+            background-color: #2C2C2C;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .form-floating textarea {
+            border-radius: 4px;
+        }
+
+        .c-PJLV.c-gFjEVZ,
+        .c-lbbfNW.c-cEifbC {
+            margin: 0;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 21px;
+            color: #808080;
+        }
+
+        .c-PJLV.c-gFjEVZ:hover {
+            background: #363636;
+            background-color: #2C2C2C;
+            border: none;
+        }
+
+        form .btn-primary {
+            letter-spacing: 0px;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 26px;
+            white-space: nowrap;
+            user-select: none;
+            border-radius: 4px;
+        }
+
+        .c-PJLV.c-gFjEVZ,
+        .c-lbbfNW.c-cEifbC {
+            margin: 0;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 21px;
+            color: #808080;
+        }
+
+        .c-PJLV.c-gFjEVZ:hover {
+            background: #363636;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, .5);
+        }
+
+        .popup-custom {
+            border-radius: 15px;
+            background: rgb(38, 38, 38);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .popup-content h2,
+        .segment-video-main h3 {
+            color: white;
+            font-weight: 400;
+        }
+
+        .pd-10-25 {
+            padding: 10px 15px !important;
+            margin: 8px;
+        }
+
+        #closePopup {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 20px 5px;
+            width: 100%;
+        }
+
+        .fa-xmark {
+            border: none;
+            padding: 0 8px 5px;
+            color: white;
+            border-radius: 15px;
+        }
+
+        .segment-texts-main .segment-text textarea {
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgb(54, 54, 54) !important;
+            border: none;
+            color: white;
+            outline: 1px solid #4a4848;
+        }
+
+        .segment-texts-main .segment-text h4 {
+            color: grey !important;
+            margin-top: 1rem;
+            font-weight: 400 !important;
+        }
+
+        .ct-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid #464545;
+        }
+
+        .ct-btn:hover {
+            background: lightslategray;
+        }
+
+        .btn-success {
+            margin-top: 1rem;
+            padding: 10px 25px;
+        }
+
+        .btn-76 {
+            background-color: transparent;
+            color: #fff;
+            cursor: pointer;
+            line-height: 1.5;
+            border: 1px solid white;
+            font-weight: 900;
+            overflow: hidden;
+            padding: 3px 15px !important;
+            position: relative;
+            text-transform: capitalize;
+            border-radius: 3px;
+            max-width: max-content;
+            font-size: 15px;
+        }
+
+        .btn-secondary {
+            background: transparent !important;
+            color: rgba(255,255,255,.5)  !important;
+            border: none !important;
+        }
+
+        .btn-secondary:hover {
+            /* background: white !important; */
+            color: rgba(255,255,255,.2) !important;
+        }
+
+        .flickity-cell {
+            width: 100%;
+        }
+
+        input[type="file"] {
+            max-width: 250px;
+            position: relative;
+            padding-left: 35px;
+        }
+
+        .upload-btn {
+            border-radius: 10px;
+            padding: 7px 12px !important;
+            font-size: 0.8em;
+            color: #D4FF9D !important;
+            background: transparent;
+            border: 1px solid white;
+            border-radius: 7px;
+        }
+
+        .upload-btn:hover {
+            border: 1px solid #D4FF9D;
+            color: rgba(255, 255, 255, .5) !important;
+        }
+
+        .video_page_title {
+            color: white !important;
+        }
+
+        .btn-outline-danger:hover {
+            background: transparent !important;
+        }
+
+        .btn-outline-success:hover {
+            background: transparent !important;
+        }
+
+        .col-lg-7 {
+            max-width: 50%;
+            width: 100%;
+        }
+
+        .video_generated {
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .segment-video-main {
+            padding: 5px;
+            margin: 20px 0;
+            width: 98%;
+        }
+
+        .carousel-cell.video-container {
+            margin-top: 0px;
+            padding: 0px 0px 10px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .carousel-cell.video-container video {
+            width: 100%;
+            height: 220px;
+        }
+        
+        .btn-check:focus+.btn-secondary, .btn-secondary:focus{
+            box-shadow: none !important;
+        }
+
+        .loader-container{
+            max-width: 60%;
+            width: 100%;
+        }
+
+        @media only screen and (min-width: 992px) {
+            .mx-auto.wow.fadeIn.input-txt-to-create-vid.maxima-sub-head {
+                max-width: 60% !important;
+            }
+
+            .col-lg-7 {
+                width: 60.333333% !important;
+            }
+
+
+        }
+
+        @media only screen and (min-width: 1400px) {
+            #progressBar {
+                width: 96%;
+            }
+
+            .carousel-cell.video-container {
+                padding: 10px;
+            }
+        }
+
+        @media only screen and (max-width: 1400px) {
+            .col-lg-7 {
+                max-width: 59%;
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 1200px) {
+            .col-lg-7 {
+                max-width: 69%;
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 992px) {
+            .col-lg-7 {
+                max-width: 92%;
+                width: 100%;
+            }
+
+            .mx-auto.wow.fadeIn.input-txt-to-create-vid.maxima-sub-head {
+                max-width: 100% !important;
+            }
+
+            .carousel-cell.video-container video {
+                width: 300px;
+                height: 220px;
+            }
+
+            .loader-container{
+                max-width: 98% !important;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            .col-lg-7 {
+                max-width: 100%;
+                width: 100%;
+            }
+            .video_generated{
+                height: 290px !important;
+            }
+            .form-floating>.form-control:focus {
+                background: transparent;
+                border: none;
+                outline: none;
+                color: white;
+            }
+
+            .carousel-cell.video-container video {
+                width: 98%;
+                height: 300px;
+            }
+
+            .carousel-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            .popup-content {
+                margin: 0;
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            .pd-10-25 {
+                padding: 10px 6px !important;
+            }
+
+            .flickity-button {
+                width: 20px !important;
+                height: 20px !important;
+            }
+
+            .segment-texts-main .segment-text textarea {
+                max-width: 95% !important;
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 564px) {
+            #progressBar {
+                width: 90% !important;
+            }
+            .video_generated{
+                height: 280px !important;
+            }
+        }
+
+        @media only screen and (max-width: 425px) {
+            .video_generated{
+                height: 210px !important;
+            }
+            .carousel-cell.video-container video{
+                height: 190px;
+            }
+        }
+        .change-in-segment-text {
+            padding: 35px;
+        }
+
+        .save-segment-text-btn {
+            padding: 10px 40px !Important;
+        }
+
+        textarea::-webkit-scrollbar {
+            width: 0.1em;
+            display: none;
+        }
+
+        .form-control:focus {
+            box-shadow: none !important;
+        }
+
+        .carousel-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            width: 100%;
+        }
+
+        @media screen and (min-width: 768px) {
+            .carousel-container {
+                grid-template-columns: repeat(2, 1fr);
+                min-width: calc(100% / 2) !important;
+            }
+        }
+
+        .btn-group-wrapper {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 5px 0;
+            /* justify-content: center; */
+        }
+
+        .btn-group-wrapper button {
+            max-width: fit-content;
+            min-width: fit-content;
+            width: 100%;
+            padding: 0 !important;
+            margin: 0 15px !important;
+        }
+
+        .merge-final-video,
+        .edited-final-video {
+            position: relative !important;
+        }
+
+        .merge-final-video .btn-download {
+            position: absolute !important;
+            top: 100% !important;
+            right: 0%;
+            background: transparent !Important;
+            border: 1px solid white !important;
+            padding: 3px 15px !Important;
+            border-radius: 3px !important;
+        }
+
+        .edited-final-video .btn-download {
+            position: absolute !important;
+            top: 100% !important;
+            right: 0%;
+            background: transparent !Important;
+            border: 1px solid white !important;
+            padding: 3px 15px !Important;
+            border-radius: 3px !important;
+            font-size: 15px;
+        }
+
+        .label-hide-input {
+            color: gray;
+            border: 1px solid rgb(47 46 46);
+            margin: 10px;
+            border-radius: 10px;
+            padding: 3px;
+        }
+
+        .label-hide-input:hover {
+            border: 1px solid lightgrey;
+        }
+
+        .label-hide-input .fa-solid {
+            font-size: 2em;
+            margin: 8px 10px;
+        }
+
+        .label-hide-input span {
+            font-size: 0.8em;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            #progressBar {
+                left: 50% !important;
+            }
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            /* Adjust the width as needed */
+            max-width: 800px;
+            /* Set a max-width if desired */
+            margin: auto;
+            /* Center the container */
+        }
+
+        /* Style for the progressBar div */
+        #progressBar {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 2;
+            /* Make sure the progress bar appears on top of the video */
+        }
+
+        #navbarCollapse .navbar-nav.ms-auto {
+            width: 100%;
+        }
+
+        #navbarCollapse .navbar-nav.ms-auto span {
+            width: 70%;
+            text-align: center;
+        }
+
+        /* Style for the background-video div */
+        .background-video {
+            position: relative;
+            display: none;
+        }
+
+        /* Style for the video element */
+        #background-myVideo {
+            width: 100%;
+            height: auto;
+            /* Maintain the aspect ratio */
+            display: block;
+        }
+
+        .navbar-dark .navbar-toggler {
+            border: none;
+        }
+
+        /* button:focus:not(:focus-visible) {
+            border: none !important;
+        } */
+
+        .container-fluid.sticky-top {
+            padding: 0;
+        }
+
+        .container-fluid.sticky-top .container {
+            padding: 0;
+        }
+
+        .container-fluid.sticky-top .container nav {
+            padding: 11px 20px !important;
+        }
+
+        .hide-popup {
+            display: none;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(0, 0, 0, 0.4);
+            height: 100vh;
+        }
+
+        .popup-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            height: 100%;
+        }
+
+        .popup-inside-wrapper {
+            max-width: 40%;
+            width: 100%;
+            background-color: #1C1C1C;
+            padding: 20px 0;
+        }
+
+        .btn-wrapper {
+            text-align: end;
+            padding: 0 20px;
+        }
+
+        .btn-close-ct {
+            background: transparent;
+            border: 1px solid #b1aaaa;
+            border-radius: 50px;
+            padding: 0 3px;
+        }
+
+        .btn-close-ct .fa-solid.fa-xmark {
+            border: none;
+            padding: 10px;
+            color: #b1aaaa;
+        }
+
+        .btn-close-ct:hover .fa-solid.fa-xmark {
+            transform: rotate(180deg);
+        }
+
+        .hide-popup .nav-item-wrapper .navbar-nav a,
+        .hide-popup .nav-item-wrapper .navbar-nav span {
+            padding: 20px;
+            border-bottom: 1px solid black;
+            font-size: 14px;
+        }
+
+        .nav-item-wrapper {
+            margin-top: 40px;
+        }
+
+        .nav-item-wrapper .navbar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-item-wrapper .navbar-nav a {
+            color: #FFFFFF80;
+        }
+
+        .select-gender-main {
+            align-items: baseline;
+        }
+
+        .select-gender-main #selectgender-title {
+            font-size: 16px !important;
+            margin-right: 5px;
+        }
+
+        .select-gender-main #selectgender {
+            padding: 7px;
+            font-size: 14px !important;
+            width: 18% !important;
+            border: 1px solid rgb(171 165 165);
+            border-radius: 5px;
+        }
+        #editPopup .btn-group-wrapper button.active{
+            color: rgba(255,255,255,.9) !important;
+            font-size: 15px;
+        }
+        .menu-in-edit{
+            display: flex;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .menu-in-edit h2{
+            width: 100%;
+            max-width: 70%;
+            min-width: 65%;
+            text-align: end;
+            color: white;
+        }
+        .menu-header{
+            border-top-left-radius: 15px;
+            border-top-right-radius: 14px;
+            background-color: #2E2E2E;
+        }
+        input[type="file"]::file-selector-button{
+            display: none;
+        }
+        input[type="file"]::before{
+            background-image: url(https://cdn1.iconfinder.com/data/icons/hawcons/32/698977-icon-130-cloud-upload-512.png);
+            content: "";
+            height: 30px;
+            display: block;
+            background-repeat: no-repeat;
+            background-size: contain;
+            position: absolute;
+            left:0;
+            right: 0;
+        }
+        input[type="file"]:hover::file-selector-button{
+            display: none;
+            max-width: fit-content;
+            background-color: transparent;
+            color: rgba(255, 255, 255, .5);
+            font-size: 12px;
+        }
+        @media only screen and (max-width: 640px) {
+            .popup-inside-wrapper {
+                max-width: 100%;
+            }
+        }
+    </style>
+    <meta charset="utf-8">
+    <title>AI.Tech - Artificial Intelligence HTML Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Ubuntu:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- Add the Slick CSS files -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flickity@3.0.0/css/flickity.min.css">
+</head>
+
+<body style="background-color: #141414;">
+
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top">
+        <div class="container" style="max-width: 1280px;">
+            <nav class="navbar navbar-expand-lg navbar-dark p-0">
+                <a href="#" class="nav-item nav-link active history-sidebar"><svg width="17px" height="13px"
+                        viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M0 0.5C0 0.223858 0.223858 0 0.5 0H16.5C16.7761 0 17 0.223858 17 0.5C17 0.776142 16.7761 1 16.5 1H0.5C0.223858 1 0 0.776142 0 0.5ZM0 6.5C0 6.22386 0.223858 6 0.5 6H16.5C16.7761 6 17 6.22386 17 6.5C17 6.77614 16.7761 7 16.5 7H0.5C0.223858 7 0 6.77614 0 6.5ZM0.5 12C0.223858 12 0 12.2239 0 12.5C0 12.7761 0.223858 13 0.5 13H16.5C16.7761 13 17 12.7761 17 12.5C17 12.2239 16.7761 12 16.5 12H0.5Z"
+                            fill="white"></path>
+                    </svg></a>
+                <a href="{% url 'index' %}" class="navbar-brand">
+                    <h1 class="text-white">AI<span class="text-white">.</span>Video</h1>
+                </a>
+                <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto">
+                        <span>Welcome, {{ workspace_name }}! You have successfully signed up.</span>
+                        {% if request.session.email %}
+                        <a href="{% url 'work_space' pk=1 %}" class="nav-item nav-link active">Create New</a>
+                        <a href="{% url 'logout' %}" class="nav-item nav-link active">LogOut</a>
+                        {% else %}
+                        <a href="{% url 'signup' %}" class="nav-item nav-link active">SignUp</a>
+                        <a href="{% url 'login' %}" class="nav-item nav-link active">LogIn</a>
+                        {% endif %}
+                        {% if request.session.email %}
+                        {% for i in WorkSpace %}
+                        <a href="{% url 'work_space' pk=i.pk %}" class="nav-item nav-link active">WorkSpace</a>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+            <div class="hide-popup">
+                <div class="popup-wrapper">
+                    <div class="popup-inside-wrapper">
+                        <div class="btn-wrapper">
+                            <button class="btn-close-ct">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="nav-item-wrapper">
+                            <div class="navbar-nav ms-auto">
+                                <span>Welcome, {{ workspace_name }}! You have successfully signed up.</span>
+                                {% if request.session.email %}
+                                <a href="{% url 'work_space' pk=1 %}" class="nav-item nav-link active">Create New</a>
+                                <a href="{% url 'logout' %}" class="nav-item nav-link active">LogOut</a>
+                                {% else %}
+                                <a href="{% url 'signup' %}" class="nav-item nav-link active">SignUp</a>
+                                <a href="{% url 'login' %}" class="nav-item nav-link active">LogIn</a>
+                                {% endif %}
+                                {% if request.session.email %}
+                                {% for i in WorkSpace %}
+                                <a href="{% url 'work_space' pk=i.pk %}" class="nav-item nav-link active">WorkSpace</a>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-light p-3"
+                            placeholder="Type search keyword">
+                        <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End -->
+
+    {% block content %}
+
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="loader-container" style="max-width: 60%;">
+                <div class="loader-main">
+                    <div id="loader" class="loader"></div>
+                    <div id="loader-text" class="loader-text" style="width: 100%;"></div>
+                </div>
+                <div class="container">
+                    <div id="progressBar" style="display: none;">
+                        <div id="progress" class="fat-progress-bar"></div>
+                        <div id="progressText">0%</div>
+                    </div>
+                    <div class="background-video" style="display: none;">
+                        <video id="background-myVideo" width="100%" height="360" loop>
+                            <source src="{% static 'video/background.mp4' %}" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+            </div>
+            <div class="mx-auto wow fadeIn input-txt-to-create-vid maxima-sub-head" data-wow-delay="0.1s" style="max-width: 641px; display: flex;
+         justify-content: space-between;">
+                <div class="login-heading">Work-Space</div>
+                <select name="cars" id="cars"
+                    style="width: 40%; padding: 7px 14px; border-radius: 3px;     background-color: #363636; border: none; font-weight: 500; font-size: 12px; line-height: 21px; color: #f3eeee; outline: none;">
+                    <option value="volvo"
+                        style="padding: 8px 10px 8px 12px; color: var(--colors-body-text); cursor: pointer; outline: none;">
+                        Select Workflow</option>
+                    <option value="shorts"
+                        style="padding: 8px 10px 8px 12px; color: var(--colors-body-text); cursor: pointer; outline: none;">
+                        Youtube shorts</option>
+                    <option value="explainer"
+                        style="padding: 8px 10px 8px 12px; color: var(--colors-body-text); cursor: pointer; outline: none;">
+                        Youtube explainer</option>
+                    <option value="events"
+                        style="padding: 8px 10px 8px 12px; color: var(--colors-body-text); cursor: pointer; outline: none;">
+                        Recent events video</option>
+                    <option value="Video"
+                        style="padding: 8px 10px 8px 12px; color: var(--colors-body-text); cursor: pointer; outline: none;">
+                        Script to Video</option>
+                </select>
+                <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse" style="display: none;">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <div class="wow fadeIn" data-wow-delay="0.3s">
+                        {% if msg %}
+                        <p style="color: green;">{{msg}}</p>
+                        {% elif msg1 %}
+                        <p style="color: red;">{{msg1}}</p>
+                        {% else %}
+                        <p style="color: red;"></p>
+                        {% endif %}
+                        <form method="post" action="{% url 'work_space' pk=user.pk %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- Your form fields go here -->
+                            {% if not merged_audio_and_video_path %}
+                            <div class="col-12 input-txt-to-create-vid">
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a text here" name="message"
+                                        id="message" style="height: 95px"></textarea>
+                                    <label for="message">Give Me A Text...</label>
+                                </div>
+                            </div>
+                            <div class="d-flex mt-2 justify-content-center select-gender-main">
+                                <span id="selectgender-title" class="fs-3">Voice : </span>
+                                <select name="gender" id="selectgender"
+                                    class="form-select bg-transparent w-25 form-select-lg mb-3">
+                                    <option value="en-US-Standard-J">Male</option>
+                                    <option value="en-US-Standard-C">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-12 input-txt-to-create-vid" style="margin-top: 15PX; text-align: right;">
+                                <button class="btn btn-primary btn-to-mrg-vid" type="submit">Generate Video</button>
+                            </div>
+                            <div class="c-PJLV c-cuMWso try-this"
+                                style="background-color: #1C1C1C; width: 100%; max-width: 470px; border-radius: 6px; padding: 20px 10px; margin: 20px auto 0 auto;">
+                                <div class="c-PJLV c-kqvkfk"
+                                    style="display: flex; justify-content: center; margin-bottom: 20px;">
+                                    <p class="c-lbbfNW c-cEifbC"
+                                        style="font-weight: 500; font-size: 12px; line-height: 21px; color: #808080;">
+                                        Try these</p>
+                                </div>
+                                <div class="c-PJLV c-eOsLIL"
+                                    style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px;">
+                                    <div class="c-PJLV c-fkxbHL"
+                                        style="display: flex; justify-content: center; gap: 30px; margin: 0 20px;">
+                                        <div class="c-PJLV c-gFjEVZ"
+                                            style="display: flex; justify-content: center; border: 1px solid hsl(0, 0%, 20%); border-radius: 5px;padding: 8px 10px; cursor: pointer;">
+                                            <p class="c-lbbfNW c-cEifbC" href="https://www.youtube.com/">Youtube explainer</p>
+                                        </div>
+                                        <div class="c-PJLV c-gFjEVZ"
+                                            style="display: flex; justify-content: center; border: 1px solid hsl(0, 0%, 20%); border-radius: 5px;padding: 8px 10px; cursor: pointer;">
+                                            <p class="c-lbbfNW c-cEifbC" href="https://www.youtube.com/shorts/">Youtube shorts</p>
+                                        </div>
+                                    </div>
+                                    <div class="c-PJLV c-fkxbHL" style="display: flex; justify-content: center;">
+                                        <div class="c-PJLV c-gFjEVZ"
+                                            style="display: flex; justify-content: center; border: 1px solid hsl(0, 0%, 20%); border-radius: 5px;padding: 8px 10px; cursor: pointer;">
+                                            <p class="c-lbbfNW c-cEifbC">Recent events video</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="c-PJLV c-jOtZaP" style="display: flex; justify-content: center;">
+                                    <p class="c-lbbfNW c-cEifbC c-lbbfNW-igWBmlJ-css"
+                                        style="display: flex; align-items: center; gap: 10px;">
+                                        Watch tutorial
+                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="c-fOWMyd">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M10.9972 5.66871C11.2521 5.81595 11.2521 6.18395 10.9972 6.33118L2.25347 11.3807C1.99848 11.5279 1.67969 11.3439 1.67969 11.0494L1.67969 0.950455C1.67969 0.656 1.99846 0.471952 2.25348 0.619221L10.9972 5.66871ZM10.071 5.99995L2.42969 1.58707L2.42969 10.4128L10.071 5.99995Z"
+                                                fill="#9E9E9E"></path>
+                                        </svg>
+                                    </p>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% comment %} {% if work_space_entry %}
+                            <div class="mt-3 input-txt-to-create-vid">
+                                <h4>WorkSpace Entry Information:</h4>
+                                <p>User: {{ work_space_entry.user.name }}</p>
+                                <p>Message: {{ work_space_entry.message }}</p>
+                                <p>Generated Text: {{ work_space_entry.generated_text }}</p>
+                                <!-- <p>Video URL: <a href="{{ work_space_entry.video_url }}" target="_blank">{{ work_space_entry.video_url }}</a></p> -->
+                                <p>Date Created: {{ work_space_entry.created_at }}</p>
+                                <!-- Add any other fields you want to display -->
+                            </div>
+                            {% endif %} {% endcomment %}
+                            {% if merged_audio_and_video_path %}
+                            <div class="merge-final-video">
+                                <h3 class="video_page_title">Merged Video:</h3>
+                                <video width="640" height="360" controls class="video_generated">
+                                    <source src="{{ merged_audio_and_video_path|safe }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <a href="{{ merged_audio_and_video_path|safe }}" download="merged_video.mp4"
+                                    id="downloadButton" class="btn btn-primary btn-download">Download</a>
+                            </div>
+                            {% endif %}
+                        </form>
+                        <div class="edited-final-video">
+
+                        </div>
+                        <div class="sidebar-container">
+                            <div class='user-history'>
+                                {% if user_work_space_entries %}
+                                <h3>User's WorkSpace History</h3>
+                                <ul>
+                                    {% for entry in user_work_space_entries %}
+                                    <li>
+                                        <svg width="16" height="16" viewBox="0 0 18 19" fill="#FFFFFF"
+                                            xmlns="http://www.w3.org/2000/svg" fill-opacity="0.5"
+                                            style="height: 16px; width: 16px;">
+                                            <path
+                                                d="M8.20312 5.26172C8.42965 5.26172 8.61328 5.44535 8.61328 5.67188V9.63672H11.4844C11.7109 9.63672 11.8945 9.82035 11.8945 10.0469C11.8945 10.2734 11.7109 10.457 11.4844 10.457H8.20312C7.9766 10.457 7.79297 10.2734 7.79297 10.0469V5.67188C7.79297 5.44535 7.9766 5.26172 8.20312 5.26172Z"
+                                                fill="white"></path>
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M1.23047 9.5C1.23047 5.34708 4.59708 1.98047 8.75 1.98047C12.9029 1.98047 16.2695 5.34708 16.2695 9.5C16.2695 13.6529 12.9029 17.0195 8.75 17.0195C4.59708 17.0195 1.23047 13.6529 1.23047 9.5ZM8.75 2.80078C5.05012 2.80078 2.05078 5.80012 2.05078 9.5C2.05078 13.1999 5.05012 16.1992 8.75 16.1992C12.4499 16.1992 15.4492 13.1999 15.4492 9.5C15.4492 5.80012 12.4499 2.80078 8.75 2.80078Z"
+                                                fill="white"></path>
+                                        </svg>
+                                        <a href="{{ entry.video_url }}" target="_blank">{{ entry.message }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if merged_audio_and_video_path %}
+                        <button id="editButton" class="btn-76">Edit</button>
+                        <div id="editPopup" class="popup-custom" style="display:none">
+                            <div class="menu-header">
+                                <div class="menu-in-edit">
+                                <h2>Edit Video</h2>
+                                <div id="closePopup"><i class="fa-solid fa-xmark"></i></div>  
+                                </div>  
+                                <div class="btn-group-wrapper">
+                                    <button id="segment-button-text"
+                                        class="btn btn-secondary pd-10-25 ct-btn">segment-texts</button>
+                                    <button id="segment-button-video"
+                                        class="btn btn-secondary pd-10-25 ct-btn active">segment-videos</button>
+                                    <button id="merge-edited-audio-video"
+                                        class="btn btn-secondary pd-10-25 ct-btn">edited-videos</button>
+                                </div>
+                            </div>
+                            <div class="popup-content">
+                                <div class="segment-texts-main">
+                                    {% for segment_text in segment_texts %}
+                                    <div class="segment-text">
+                                        <h4>Segment {{ forloop.counter }}</h4>
+                                        <textarea class="segment-textarea" id="segment-text-{{ forloop.counter }}"
+                                            name="w3review" rows="4" cols="50"
+                                            data-segment-text="{{ forloop.counter }}">{{ segment_text }}</textarea>
+                                    </div>
+                                    {% endfor %}
+                                    <div class="change-in-segment-text"><button
+                                            class="save-segment-text-btn btn btn-outline-success"
+                                            type="button">Save</button></div>
+                                </div>
+                                <div class="segment-video-main">
+                                    {% if segment_urls %}
+                                    <h3>Segmented Videos:</h3>
+                                    <div class="slider_wrapper">
+                                        <div class="carousel-container">
+                                            {% for segment_url in segment_urls %}
+                                            <div class="carousel-cell video-container">
+                                                <video width="250" height="170" controls>
+                                                    <source src="{{ segment_url }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                                <div class="uploaded-media"></div>
+                                                <!-- Div to display the uploaded media -->
+                                                <p style="margin-bottom: 0;text-align: end"><a href="#"
+                                                        class="btn ml-1 delete-segment-btn" data-url="{{ segment_url }}"
+                                                        data-segment-index="{{ forloop.counter0 }}"><i
+                                                            class="fa-solid fa-trash"></i></a></p>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <!-- {% if generated_text %}
+                           <div class="after-generated-text-main">
+                               <h3>Generated Text:</h3>
+                               <p>{{ generated_text }}</p>
+                           </div>
+                           {% endif %} -->
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
+
+    <div class="container-fluid text-white-50 footer pt-5">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
+                    <a href="index.html" class="d-inline-block mb-3">
+                        <h1 class="text-white">AI<span class="text-primary">.</span>Video</h1>
+                    </a>
+                    <p class="mb-0" style="color: rgba(255,255,255,.5);">AI.video offers a seamless experience, empowering you to create captivating videos effortlessly with the power of artificial intelligence, revolutionizing your content creation process.</p>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
+                    <h5 class="text-white mb-4">Get In Touch</h5>
+                    <p style="color: rgba(255,255,255,.5);"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New
+                        York, USA</p>
+                    <p style="color: rgba(255,255,255,.5);"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                    <p style="color: rgba(255,255,255,.5);"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
+                    <h5 class="text-white mb-4">Popular Link</h5>
+                    <a class="btn btn-link" href="">AI.Video</a>
+                    <a class="btn btn-link" href="">LogIn</a>
+                    <a class="btn btn-link" href="">SignUp</a>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.7s">
+                    <h5 class="text-white mb-4">Our Services</h5>
+                    <a class="btn btn-link" href="">Text Generation</a>
+                    <a class="btn btn-link" href="">Video Creation</a>
+                    <a class="btn btn-link" href="">Audio Synthesis</a>
+                    <a class="btn btn-link" href="">Customization Options</a>
+                    <a class="btn btn-link" href="">Advanced AI</a>
+                </div>
+            </div>
+        </div>
+        <div class="container wow fadeIn" data-wow-delay="0.1s">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0 text-white">
+                        &copy; <a class="border-bottom text-white" href="#">AI Video</a>, All Right Reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top pt-2"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flickity@3.0.0/dist/flickity.pkgd.min.js"
+        integrity="sha256-K8XfylopijCrS7K3AJlF3A1fUNnM8a9m0co7Vl6Qkkw=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript">
+        // Function to display the loader and text
+        function showLoader() {
+            document.getElementById("loader").style.display = "block";
+            document.getElementById("loader-text").style.display = "block";
+            updateLoaderText();
+        }
+        // Function to hide the loader and text
+        function hideLoader() {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("loader-text").style.display = "none";
+        }
+        let getGetDemo = document.querySelector(".btn-to-mrg-vid");
+        getGetDemo.addEventListener("click", () => {
+            showLoader();
+        });
+        function updateLoaderText() {
+            let loaderText = document.getElementById("loader-text");
+            let texts = [
+                "Generating text",
+                "Generating audio",
+                "Fetching video",
+                "Merging video",
+                "Merging video and audio",
+                "Output will be ready soon"
+            ];
+            let index = 0;
+            function setText() {
+                loaderText.innerHTML = texts[index];
+                index = (index + 1) % texts.length;
+                setTimeout(setText, 10000); // Update text every 5 seconds
+            }
+            setText();
+        }
+        $(document).ready(function () {
+            $(".btn-to-mrg-vid").click(function () {
+                $(".select-gender-main").addClass("hide-element");
+                $(".select-gender-main").removeClass("d-flex");
+                let video = document.getElementById("background-myVideo");
+                video.autoplay = true;
+                video.load();
+                $(".input-txt-to-create-vid").hide();
+                $(".maxima-sub-head").hide();
+                $(".try-this").hide();
+                $(".background-video").show();
+                $("#progressBar").show();
+                updateProgressBar();
+            });
+        });
+        function updateProgressBar() {
+            let progressBar = document.getElementById('progress');
+            let progressText = document.getElementById('progressText');
+            let width = 0;
+            let interval = setInterval(() => {
+                if (width >= 99) { // Stop at 99%
+                    clearInterval(interval);
+                } else {
+                    width += 1;
+                    progressBar.style.width = width + '%';
+                    progressText.innerText = width + '%';
+                }
+            }, 2500); // 5 seconds interval
+            // Wait for the whole page to load
+            window.onload = function () {
+                // When the page is fully loaded, set the progress to 100%
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+                progressText.innerText = '100%';
+                // Hide the progress bar after a brief delay (e.g., 1 second)
+                setTimeout(function () {
+                    $("#progressBar").hide();
+                }, 1000);
+            };
+        }
+    </script>
+    <script>
+        function updateProgressBars() {
+            let progressBar = document.getElementById('progress');
+            let progressText = document.getElementById('progressText');
+            let width = 0;
+            let interval = setInterval(() => {
+                if (width >= 99) { // Stop at 99%
+                    clearInterval(interval);
+                } else {
+                    width += 1;
+                    progressBar.style.width = width + '%';
+                    progressText.innerText = width + '%';
+                }
+            }, 500); // 5 seconds interval
+            // Wait for the whole page to load
+            window.onload = function () {
+                // When the page is fully loaded, set the progress to 100%
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+                progressText.innerText = '100%';
+                // Hide the progress bar after a brief delay (e.g., 1 second)
+                setTimeout(function () {
+                    $("#progressBar").hide();
+                }, 1000);
+            };
+        }
+        document.getElementById("merge-edited-audio-video").addEventListener("click", function () {
+            $(".select-gender-main").addClass("hide-element");
+            $(".select-gender-main").removeClass("d-flex");
+            $('#editPopup').hide();
+            $(".merge-final-video").hide();
+            $("#loader").show();
+            $(".edited-final-video").hide();
+            $(".background-video").show();
+            $("#loader-text").text("Loading edited video");
+            $(".input-txt-to-create-vid").hide();
+            $("#selectgender").hide();
+            $("#selectgender-title").hide();
+            $("#editButton").hide();
+            $("#progressBar").show();
+            updateProgressBars();
+            let video = document.getElementById("background-myVideo");
+            video.autoplay = true;
+            video.load();
+            // Make an AJAX request to your Django view
+            fetch('/merge_edited_audio_video/{{ pk }}/', {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Check if merged_video_path is available
+                        if (data.merged_edited_video) {
+                            // Update or reload the content based on the response
+                            $(".edited-final-video").html(
+                                '<h3 style="color: #D4FF9D">Edited Video:</h3>' +
+                                '<video width="640" height="360" controls class="video_generated">' +
+                                '<source src="' + data.merged_edited_video + '" type="video/mp4">' +
+                                'Your browser does not support the video tag.' +
+                                '</video>' +
+                                '<a href="' + data.merged_edited_video + '" download="AI-video.mp4" id="downloadButton" class="btn btn-primary btn-download">Download</a>'
+                            );
+                            $(".edited-final-video").show();
+                            $("#loader").hide();
+                            $("#loader-text").text(" ");
+                            $(".background-video").hide();
+                            $(".input-txt-to-create-vid").show();
+                            $("#editButton").show();
+                            $("#progressBar").hide();
+                        }
+                    } else {
+                        // Handle failure
+                        console.error('Error:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Dynamically add file upload form for each video container
+            $('.video-container').each(function (index) {
+                // Get the current segment index
+                var segmentIndex = $(this).find('.delete-segment-btn').data('segment-index');
+
+                // Construct the form action URL with the correct pk value
+                var formAction = '{% url "upload_video" pk=1 %}'.replace('1', segmentIndex + 1);
+
+                var formHtml = '<form method="post" enctype="multipart/form-data" action="' + formAction + '">' +
+                    '{% csrf_token %}' +
+                    '<input type="file" name="video_upload" accept="video/*">' +
+                    '<button type="button" class="upload-btn pd-10-25 btn-secondary">Upload & Save</button>' +
+                    '</form>';
+
+                $(this).append(formHtml);
+
+                // Handle form submission using AJAX
+                $(this).on('click', '.upload-btn', function (e) {
+                    e.preventDefault();
+
+                    var formData = new FormData($(this).closest('form')[0]);
+
+                    $.ajax({
+                        url: formAction,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            console.log('Response:', response);
+                            // You can handle the response here as needed
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                            // You can handle errors here
+                        }
+                    });
+                });
+            });
+        });
+
+    </script>
+    <script>
+        document.getElementById('mediaUpload').addEventListener('change', function (event) {
+            const file = event.target.files[0]; // Get the uploaded file
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const mediaDiv = document.querySelector('.uploaded-media');
+                    mediaDiv.innerHTML = ''; // Clear previous media
+
+                    if (file.type.includes('video')) {
+                        // Display video if the uploaded file is a video
+                        const videoElement = document.createElement('video');
+                        videoElement.src = e.target.result;
+                        videoElement.controls = true;
+                        videoElement.width = 320;
+                        videoElement.height = 240;
+                        mediaDiv.appendChild(videoElement);
+                    } else if (file.type.includes('image')) {
+                        // Display image if the uploaded file is an image
+                        const imageElement = document.createElement('img');
+                        imageElement.src = e.target.result;
+                        imageElement.width = 320;
+                        imageElement.height = 240;
+                        mediaDiv.appendChild(imageElement);
+                    } else {
+                        // Handle other file types (if necessary)
+                        const errorMessage = document.createElement('p');
+                        errorMessage.textContent = 'Uploaded file is not supported.';
+                        mediaDiv.appendChild(errorMessage);
+                    }
+                };
+
+                reader.readAsDataURL(file); // Read the uploaded file as a data URL
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Get the CSRF token from the cookie
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        // Search for the CSRF token cookie
+                        if (cookie.startsWith('csrftoken=')) {
+                            cookieValue = decodeURIComponent(cookie.substring('csrftoken='.length));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            // Event listener for delete button click
+            $('.delete-segment-btn').on('click', function (e) {
+                e.preventDefault();
+
+                const segmentIndex = $(this).data('segment-index');
+                const segmentUrl = $(this).data('url');
+
+                const csrftoken = getCookie('csrftoken');
+
+                $.ajax({
+                    url: `/delete-segment/{{ work_space_entry.pk }}/${segmentIndex}/`,
+                    type: 'DELETE',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({ segment_url: segmentUrl }),
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            $(e.target).closest('.carousel-cell').remove();
+                            console.log(response.message);
+                        } else {
+                            console.error(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            //Updating the segment text
+
+            $('.save-segment-text-btn').on('click', function (e) {
+                e.preventDefault();
+
+                const csrftoken = getCookie('csrftoken');
+                const updatedSegmentTexts = {};
+
+                // Loop through each textarea to collect updated segment texts
+                $('.segment-textarea').each(function () {
+                    const segmentIndex = $(this).data('segment-text');
+                    const segmentText = $(this).val();
+                    updatedSegmentTexts[segmentIndex] = segmentText;
+                });
+
+                // Send the updated segment texts to the server
+                $.ajax({
+                    url: `/update-segment-texts/{{ work_space_entry.pk }}/`,
+                    type: 'POST',
+                    data: {
+                        updated_texts: JSON.stringify(updatedSegmentTexts),
+                    },
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            console.log(response.message);
+                        } else {
+                            console.error(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // JavaScript to initialize Slick slider after the DOM is ready
+        $(document).ready(function () {
+            document.addEventListener('DOMContentLoaded', function () {
+                var flkty = new Flickity('.main-carousel', {
+                    wrapAround: false,
+                    // Additional Flickity options can be added here
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.segment-texts-main').hide();
+            $('#segment-button-text').click(function () {
+                $('.segment-texts-main').show();
+                $('.segment-video-main').hide();
+                $('#segment-button-text').addClass("active")
+                $('#segment-button-video').removeClass("active")
+            });
+            $('#segment-button-video').click(function () {
+                $('.segment-texts-main').hide();
+                $('.segment-video-main').show();
+                $('#segment-button-video').addClass("active")
+                $('#segment-button-text').removeClass("active")
+            });
+        });
+        $(document).ready(function () {
+            $(".history-sidebar").click(function () {
+                $(".sidebar-container").toggleClass("active");
+            });
+        });
+    </script>
+    <script>
+        document.getElementById("editButton").addEventListener("click", function () {
+            // Show the popup
+            document.getElementById("editPopup").style.display = "block";
+        });
+        // Event listener for the "Close" button in the popup
+        document.getElementById("closePopup").addEventListener("click", function () {
+            // Close the popup
+            document.getElementById("editPopup").style.display = "none";
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // $('.navbar-toggler').click(function(){
+            //     $('.collapse.navbar-collapse').toggle();
+            // });
+            $(".navbar-toggler-icon").click(function () {
+                $(".hide-popup").show();
+            });
+            $(".btn-close-ct").click(function () {
+                $(".hide-popup").hide();
+            })
+        });
+    </script>
+</body>
+
+</html>
